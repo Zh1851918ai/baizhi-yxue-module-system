@@ -1,0 +1,36 @@
+server:
+  port: 8081
+  servlet:
+    context-path: /yingx
+    jsp:
+      init-parameters:
+        development: true #开启JSP开发模式修改页面刷新即可
+
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/yingxue
+    username: root
+    password: 772211
+  mvc:
+    view:
+      prefix: /
+      suffix: .jsp
+  servlet:
+    multipart:
+      # 上传单个文件大小的限制
+      max-file-size: 1000MB
+      # 每次请求上传文件总大小限制
+      max-request-size: 1000000MB
+  redis:
+    host: 192.168.15.129
+    port: 6379
+  data:
+    elasticsearch:
+      cluster-nodes: 192.168.15.131:9300
+
+
+mybatis-plus:
+  mapper-locations: mapper/*Mapper.xml
+  type-aliases-package: com.baizhi.Entity
