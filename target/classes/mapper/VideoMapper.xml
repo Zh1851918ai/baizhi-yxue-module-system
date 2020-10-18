@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.Dao.VideoDao">
+
+    <resultMap id="VideoResultMap" type="video">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="intro" property="intro"/>
+        <result column="coverUrl" property="coverUrl"/>
+        <result column="videoUrl" property="videoUrl"/>
+        <result column="createTime" property="createTime"/>
+        <result column="user_id" property="user_id"/>
+        <result column="c_id" property="c_id"/>
+        <result column="gr_id" property="gr_id"/>
+
+        <association property="user" javaType="User">
+            <id column="id" property="id"/>
+            <result column="username" property="username"/>
+            <result column="head_show" property="headShow"/>
+        </association>
+
+        <association property="group" javaType="Group">
+            <id column="id" property="id"/>
+            <result column="names" property="names"/>
+        </association>
+
+        <association property="category" javaType="Category">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+        </association>
+
+        <association property="play" javaType="Play">
+            <id column="id" property="id"/>
+            <result column="play_num" property="play_num"/>
+        </association>
+
+        <association property="yxLike" javaType="YxLike">
+            <id column="id" property="id"/>
+        </association>
+
+    </resultMap>
+
+    <select id="QueryAll" resultMap="VideoResultMap">
+        select v.*,u.*,c.*,g.*,p.* from yx_video v
+            LEFT JOIN yx_user u ON v.user_id=u.id
+            LEFT JOIN yx_category c ON v.c_id=c.id
+            LEFT JOIN yx_group g on v.gr_id=g.id
+            LEFT JOIN yx_play p ON v.id=p.video_id
+    </select>
+
+
+    <delete id="delete">
+        delete from yx_video where id=#{id}
+    </delete>
+
+    <insert id="add">
+        insert into yx_video (id,title,intro,coverUrl,videoUrl,createTime,user_id,c_id,gr_id) values (#{id},#{title},#{intro},#{coverUrl},#{videoUrl},#{createTime},#{user_id},#{c_id},#{gr_id})
+    </insert>
+
+    <update id="update">
+        update yx_video set title=#{title},intro=#{intro},coverUrl=#{coverUrl},videoUrl=#{videoUrl},createTime=#{createTime},user_id=#{user_id},c_id=#{c_id},gr_id=#{gr_id} where id=#{id}
+    </update>
+
+    <update id="updateCv">
+        update yx_video set coverUrl=#{coverUrl},videoUrl=#{videoUrl} where id=#{id}
+    </update>
+
+    <!--<update id="updatev">
+        update yx_video set videoUrl=#{videoUrl} where id=#{id}
+    </update>-->
+
+    <select id="queryBy" resultMap="VideoResultMap">
+        select v.*,u.*,l.* from yx_video v
+        LEFT JOIN yx_user u ON v.user_id=u.id
+        LEFT JOIN yx_like l ON v.id=l.video_id
+        where title like '%${content}%'
+    </select>
+
+
+    <select id="queryOne" resultMap="VideoResultMap">
+        select v.*,u.*,c.* from yx_video v
+            LEFT JOIN yx_user u ON v.user_id=u.id
+            LEFT JOIN yx_category c ON v.c_id=c.id
+            where v.id=#{videoId}
+    </select>
+
+    <select id="queryTwo" resultMap="VideoResultMap">
+        select v.*,u.*,c.* from yx_video v
+            LEFT JOIN yx_user u ON v.user_id=u.id
+            LEFT JOIN yx_category c ON v.c_id=c.id
+    </select>
+
+
+    <select id="queryThree" resultMap="VideoResultMap">
+        select v.*,c.* from yx_video v
+            LEFT JOIN yx_category c ON v.c_id=c.id
+            where v.c_id=#{cateId}
+    </select>
+
+
+    <!--测试-->
+    <select id="query" resultType="video">
+        select * from yx_video
+    </select>
+
+
+    <select id="QueryEs" resultType="video">
+        select * from yx_video where id=#{id}
+    </select>
+
+</mapper>
+
